@@ -3057,6 +3057,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             @Override
+            public boolean onKeyDown(int keyCode, KeyEvent event) {
+                switch (event.getKeyCode()) {
+                    case KeyEvent.KEYCODE_PAGE_UP:
+                        smoothScrollBy(0, -getHeight());
+                        break;
+                    case KeyEvent.KEYCODE_PAGE_DOWN:
+                        smoothScrollBy(0, getHeight());
+                        break;
+                }
+                return super.onKeyDown(keyCode, event);
+            }
+
+            @Override
             public void setTranslationY(float translationY) {
                 super.setTranslationY(translationY);
                 if (emptyViewContainer != null) {
@@ -5876,6 +5889,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     updateScheduledInterface(false);
                 }
                 hideFieldPanel(notify, scheduleDate, true);
+            }
+
+            @Override
+            public void onKeyboardScrollEvent(int keyCode, KeyEvent event) {
+                chatListView.onKeyDown(keyCode, event);
             }
 
             @Override

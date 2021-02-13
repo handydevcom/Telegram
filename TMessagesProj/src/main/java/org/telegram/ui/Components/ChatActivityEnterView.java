@@ -195,6 +195,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         default void onTrendingStickersShowed(boolean show) {
 
         }
+
+        default void onKeyboardScrollEvent(int keyCode, KeyEvent event) {
+
+        }
     }
 
     private final static int RECORD_STATE_ENTER = 0;
@@ -1844,6 +1848,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 } else if (i == KeyEvent.KEYCODE_CTRL_LEFT || i == KeyEvent.KEYCODE_CTRL_RIGHT) {
                     ctrlPressed = keyEvent.getAction() == KeyEvent.ACTION_DOWN;
                     return true;
+                }
+                else if ((i == KeyEvent.KEYCODE_PAGE_DOWN || i == KeyEvent.KEYCODE_PAGE_UP) && !hasText()) {
+                    if (delegate != null) {
+                        delegate.onKeyboardScrollEvent(i, keyEvent);
+                    }
                 }
                 return false;
             }
