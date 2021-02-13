@@ -29,6 +29,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.SparseIntArray;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -52,6 +53,9 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.BaseCell;
+import org.telegram.ui.Keyboard.KeyboardUtils;
+import org.telegram.ui.Keyboard.OnItemKeyboardSelectListener;
 
 import java.util.ArrayList;
 
@@ -160,10 +164,15 @@ public class FilterTabsView extends FrameLayout {
         private float lastTabWidth;
         private float animateFromTabWidth;
         private float lastWidth;
+        private OnItemKeyboardSelectListener keyboardSelectionlistener;
 
         public TabView(Context context) {
             super(context);
+            setFocusable(true);
         }
+
+        public void setOnItemKeyboardSelectListener(OnItemKeyboardSelectListener keyboardSelectionlistener) {
+            this.keyboardSelectionlistener = keyboardSelectionlistener; }
 
         public void setTab(Tab tab, int position) {
             currentTab = tab;
@@ -192,6 +201,14 @@ public class FilterTabsView extends FrameLayout {
                 changeAnimator = null;
             }
             invalidate();
+        }
+
+        @Override
+        public boolean onKeyDown(int keyCode, KeyEvent event) {
+            if(KeyboardUtils.isSelectButton(keyCode) && keyboardSelectionlistener != null) {
+                keyboardSelectionlistener.onItemKeyboardSelection(this);
+            }
+            return super.onKeyDown(keyCode, event);
         }
 
         @Override
@@ -1392,7 +1409,11 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new RecyclerListView.Holder(new TabView(mContext));
+            TabView tabView = new TabView(mContext);
+            if(parent instanceof OnItemKeyboardSelectListener) {
+                tabView.setOnItemKeyboardSelectListener((OnItemKeyboardSelectListener) parent);
+            }
+            return new RecyclerListView.Holder(tabView);
         }
 
         @Override

@@ -45,6 +45,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.BaseCell;
+import org.telegram.ui.Keyboard.OnItemKeyboardSelectListener;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -54,8 +55,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecyclerListView extends RecyclerView implements BaseCell.BaseCellDelegate {
-
+public class RecyclerListView extends RecyclerView implements OnItemKeyboardSelectListener {
     private OnItemClickListener onItemClickListener;
     private OnItemClickListenerExtended onItemClickListenerExtended;
     private OnItemLongClickListener onItemLongClickListener;
@@ -528,10 +528,10 @@ public class RecyclerListView extends RecyclerView implements BaseCell.BaseCellD
     }
 
     @Override
-    public void didEnterWithKeyboard(BaseCell cell) {
-        currentChildView = cell;
+    public void onItemKeyboardSelection(View view) {
+        currentChildView = view;
         currentChildPosition = getChildLayoutPosition(currentChildView);
-        MotionEvent e = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, cell.getX(), cell.getY(), 0);
+        MotionEvent e = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, view.getX(), view.getY(), 0);
         handleItemClick(e);
     }
 

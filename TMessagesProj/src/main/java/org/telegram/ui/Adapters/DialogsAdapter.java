@@ -61,6 +61,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.Keyboard.OnItemKeyboardSelectListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -388,8 +389,8 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 DialogCell dialogCell = new DialogCell(parentFragment, mContext, true, false, currentAccount);
                 dialogCell.setArchivedPullAnimation(pullForegroundDrawable);
                 dialogCell.setPreloader(preloader);
-                if(viewGroup instanceof BaseCell.BaseCellDelegate) {
-                    dialogCell.setDelegate((BaseCell.BaseCellDelegate) viewGroup);
+                if(viewGroup instanceof OnItemKeyboardSelectListener) {
+                    dialogCell.setOnItemKeyboardSelectListener((OnItemKeyboardSelectListener) viewGroup);
                 }
                 view = dialogCell;
                 break;
